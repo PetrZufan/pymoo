@@ -11,6 +11,7 @@ from pymoo.configuration import Configuration
 from pymoo.problems.many import *
 from pymoo.problems.multi import *
 from pymoo.problems.single import *
+from pymoo.problems.zuf import *
 
 
 # =========================================================================================================
@@ -238,6 +239,14 @@ def get_termination(name, *args, d={}, **kwargs):
 # Problems
 # =========================================================================================================
 
+def get_zuf_problem_options():
+    PROBLEM = [
+        ('zuf-fivezeros', FiveZeros),
+        ('zuf-mofivezeros', MultiObjectiveFiveZeros),
+    ]
+
+    return PROBLEM
+
 def get_problem_options():
     PROBLEM = [
         ('ackley', Ackley),
@@ -345,6 +354,8 @@ def get_problem(name, *args, d={}, **kwargs):
     if name.startswith("go-"):
         from pymoo.vendor.global_opt import get_global_optimization_problem_options
         return get_from_list(get_global_optimization_problem_options(), name.lower(), args, {**d, **kwargs})
+    elif name.startswith("zuf-"):
+        return get_from_list(get_zuf_problem_options(), name.lower(), args, {**d, **kwargs})
     else:
         return get_from_list(get_problem_options(), name.lower(), args, {**d, **kwargs})
 
