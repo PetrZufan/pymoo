@@ -13,7 +13,7 @@ class PointCrossover(Crossover):
     def _do(self, problem, X, **kwargs):
 
         # get the X of parents and count the matings
-        _, n_matings, n_var = X.shape
+        _, n_matings, n_var = X.shape[:3]
 
         # start point of crossover
         r = np.row_stack([np.random.permutation(n_var - 1) + 1 for _ in range(n_matings)])[:, :self.n_points]

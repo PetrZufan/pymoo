@@ -58,7 +58,7 @@ class Crossover:
         X[:, do_crossover, :] = _X[:, do_crossover, :]
 
         # flatten the array to become a 2d-array
-        X = X.reshape(-1, X.shape[-1])
+        X = np.reshape(X, tuple([X.shape[0] * X.shape[1]]) + X.shape[2:])
 
         # create a population object
         off = Population.new("X", X)

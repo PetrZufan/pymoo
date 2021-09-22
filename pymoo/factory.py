@@ -103,6 +103,8 @@ def get_sampling_options():
     from pymoo.operators.integer_from_float_operator import IntegerFromFloatSampling
     from pymoo.operators.sampling.random_sampling import BinaryRandomSampling
     from pymoo.operators.sampling.random_permutation_sampling import PermutationRandomSampling
+    from pymoo.operators.sampling.quantum_sampling import QuantumSuperpositionSampling
+    from pymoo.operators.sampling.quantum_sampling import QuantumRandomSampling
 
     SAMPLING = [
         ("real_random", FloatRandomSampling),
@@ -110,7 +112,9 @@ def get_sampling_options():
         ("bin_random", BinaryRandomSampling),
         ("int_random", IntegerFromFloatSampling, {'clazz': FloatRandomSampling}),
         ("int_lhs", IntegerFromFloatSampling, {'clazz': LatinHypercubeSampling}),
-        ("perm_random", PermutationRandomSampling)
+        ("perm_random", PermutationRandomSampling),
+        ("quantum_random", QuantumRandomSampling),
+        ("quantum_superposition", QuantumSuperpositionSampling)
     ]
 
     return SAMPLING
@@ -186,13 +190,15 @@ def get_mutation_options():
     from pymoo.operators.mutation.polynomial_mutation import PolynomialMutation
     from pymoo.operators.integer_from_float_operator import IntegerFromFloatMutation
     from pymoo.operators.mutation.inversion_mutation import InversionMutation
+    from pymoo.operators.mutation.quantum_mutation import QuantumBitflipMutation
 
     MUTATION = [
         ("none", NoMutation, {}),
         ("real_pm", PolynomialMutation, dict(eta=20)),
         ("int_pm", IntegerFromFloatMutation, dict(clazz=PolynomialMutation, eta=20)),
         ("bin_bitflip", BinaryBitflipMutation),
-        ("perm_inv", InversionMutation)
+        ("perm_inv", InversionMutation),
+        ("quantum_bitflip", QuantumBitflipMutation)
     ]
 
     return MUTATION
