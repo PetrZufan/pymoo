@@ -249,6 +249,8 @@ def get_zuf_problem_options():
     PROBLEM = [
         ('zuf-fivezeros', FiveZeros),
         ('zuf-mofivezeros', MultiObjectiveFiveZeros),
+        ('zuf-quantum_fivezeros', QuantumFiveZeros),
+    #    ('zuf-quantum_mofivezeros', QuantumMultiObjectiveFiveZeros),
     ]
 
     return PROBLEM
