@@ -33,31 +33,3 @@ class MultiObjectiveFiveZeros(FiveZeros):
 
     def _toInt(self, x):
         return np.sum([a * 2 ** (self.n_var - i - 1) for i, a in enumerate(x)])
-
-
-class QuantumFiveZeros(QuantumProblem):
-    def __init__(
-        self,
-        classic_problem_clazz=FiveZeros,
-        encoding_type="binary",
-        bcr_size=8,
-        n_var=8,  # number of all bits
-        zeros=5,  # number of zeros
-        n_obj=1,
-        *args,
-        **kwargs
-    ):
-        self.n_var = n_var
-        self.zeros = zeros
-        self.ones = n_var - zeros
-
-        super().__init__(
-            classic_problem_clazz=classic_problem_clazz,
-            n_var=n_var,
-            n_obj=n_obj,
-            *args,
-            **kwargs
-        )
-
-    def _init_classic_problem(self, *args, **kwargs):
-        self.classic_problem = self.classic_problem_clazz(n_var=self.n_var, zeros=self.zeros, n_obj=self.n_obj)

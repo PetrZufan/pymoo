@@ -1,13 +1,14 @@
 from pymoo.algorithms.genetic_algorithm import GeneticAlgorithm
 from pymoo.algorithms.nsga2 import NSGA2
 from pymoo.algorithms.qiga import QIGA
+from pymoo.algorithms.qnsga2 import QNSGA2
 from pymoo.algorithms.so_genetic_algorithm import comp_by_cv_and_fitness
 from pymoo.factory import get_problem
-from pymoo.operators.quantum.quantum_rotation import OriginalBinaryQuantumRotation, RealQuantumRotation, \
-    NovelBinaryQuantumRotation
+from pymoo.operators.quantum.quantum_rotation import SOOriginalBinaryQuantumRotation, SORealQuantumRotation, \
+    SONovelBinaryQuantumRotation, MORealQuantumRotation
 from pymoo.optimize import minimize
 from pymoo.problems.single.simple import SimpleMultiModal01
-from pymoo.problems.zuf import QuantumProblem, FiveZeros
+from pymoo.problems.zuf import QuantumProblem, FiveZeros, MultiObjectiveFiveZeros
 from pymoo.visualization.scatter import Scatter
 from pymoo.factory import get_crossover, get_mutation, get_sampling, get_selection
 
@@ -66,7 +67,7 @@ def FZ_QIEA():
         sampling=get_sampling("quantum_superposition"),
         crossover=get_crossover("real_one_point"),
         mutation=get_mutation("quantum_bitflip"),
-        rotation=OriginalBinaryQuantumRotation(),
+        rotation=SOOriginalBinaryQuantumRotation(),
         verbose=True
     )
 
@@ -90,7 +91,7 @@ def simple_QIEA():
         sampling=get_sampling("quantum_random"),
         crossover=get_crossover("real_one_point"),
         mutation=get_mutation("quantum_bitflip"),
-        rotation=RealQuantumRotation(),
+        rotation=SORealQuantumRotation(),
         verbose=True
     )
 
@@ -114,7 +115,7 @@ def simple_QIEA_bcr():
         sampling=get_sampling("quantum_superposition"),
         crossover=get_crossover("real_one_point"),
         mutation=get_mutation("quantum_bitflip"),
-        rotation=NovelBinaryQuantumRotation(),
+        rotation=SONovelBinaryQuantumRotation(),
         verbose=True
     )
 
@@ -130,8 +131,32 @@ def simple_QIEA_bcr():
     return
 
 
+def QMOFZ_QNSGA2():
+    problem = QuantumProblem(classic_problem_clazz=MultiObjectiveFiveZeros, encoding_type="binary", n_var=8, zeros=1)
+
+    algorithm = QNSGA2(
+        pop_size=3,
+        mutation=get_mutation("quantum_bitflip"),
+        crossover=get_crossover("real_two_point"),
+        rotation=MORealQuantumRotation(),
+        eliminate_duplicates=False,
+        verbose=True
+        )
+
+    res = minimize(
+        problem,
+        algorithm,
+        ('n_gen', 50),
+        seed=1,
+        verbose=True
+    )
+
+    plot = Scatter()
+    plot.add(problem.pareto_front(), plot_type="line", color="black", alpha=0.7)
+    plot.add(res.F, color="red")
+    plot.show()
+    return
+
+
 if __name__ == "__main__":
-    # MOFZ_NSGA2()
-    # FZ_GA()
-    # FZ_QIEA()
-     simple_QIEA_bcr()
+    QMOFZ_QNSGA2()
