@@ -25,8 +25,8 @@ class Rotation:
 
         """
 
-        Y = self._do(problem, pop.get("X"), pop.get("observed"), pop.get("F"), algorithm.opt, algorithm=algorithm, **kwargs)
+        Y = self._do(problem, pop, algorithm.opt, algorithm=algorithm, **kwargs)
         return pop.set("X", Y)
 
-    def _do(self, problem, X, O, F, opt, **kwargs):
+    def _do(self, problem, pop, opt, **kwargs):
         pass
