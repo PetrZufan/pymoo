@@ -13,7 +13,7 @@ class SimulatedBinaryCrossover(Crossover):
     def _do(self, problem, X, **kwargs):
 
         X = X.astype(float)
-        _, n_matings, n_var = X.shape
+        _, n_matings, n_var = X.shape[:3]
 
         # boundaries of the problem
         xl, xu = problem.xl, problem.xu
