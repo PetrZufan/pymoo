@@ -9,6 +9,7 @@ from pymoo.operators.quantum.quantum_rotation import SOOriginalBinaryQuantumRota
 from pymoo.optimize import minimize
 from pymoo.problems.single.simple import SimpleMultiModal01
 from pymoo.problems.zuf import QuantumProblem, FiveZeros, MultiObjectiveFiveZeros
+from pymoo.problems.zuf.nn import NeuralNetwork, SparsityRepair, NeuralNetworkSampling
 from pymoo.visualization.scatter import Scatter
 from pymoo.factory import get_crossover, get_mutation, get_sampling, get_selection
 
@@ -135,12 +136,13 @@ def QMOFZ_QNSGA2():
     problem = QuantumProblem(classic_problem_clazz=MultiObjectiveFiveZeros, encoding_type="binary", n_var=8, zeros=1)
 
     algorithm = QNSGA2(
-        pop_size=3,
+        pop_size=100,
         mutation=get_mutation("quantum_bitflip"),
         crossover=get_crossover("real_two_point"),
         rotation=MORealQuantumRotation(),
         eliminate_duplicates=False,
-        verbose=True
+        verbose=True,
+        debug=True,
         )
 
     res = minimize(
@@ -158,5 +160,58 @@ def QMOFZ_QNSGA2():
     return
 
 
+def NN_NSGA2():
+    problem = NeuralNetwork()
+    # problem = QuantumProblem(classic_problem_clazz=MultiObjectiveFiveZeros, encoding_type="binary", n_var=8, zeros=1)
+
+    algorithm = NSGA2(
+        pop_size=10,
+        sampling=NeuralNetworkSampling(),
+        repair=SparsityRepair(),
+        eliminate_duplicates=False,
+    )
+
+    res = minimize(
+        problem,
+        algorithm,
+        ('n_gen', 50),
+        seed=1,
+        verbose=True
+    )
+
+    plot = Scatter()
+    plot.add(problem.pareto_front(), plot_type="line", color="black", alpha=0.7)
+    plot.add(res.F, color="red")
+    plot.show()
+    return
+
+def QNN_NSGA2():
+    problem = QuantumProblem(classic_problem_clazz=NeuralNetwork, encoding_type="real")
+
+    algorithm = QNSGA2(
+        pop_size=10,
+        mutation=get_mutation("quantum_bitflip"),
+        crossover=get_crossover("real_two_point"),
+        rotation=MORealQuantumRotation(),
+        eliminate_duplicates=False,
+        verbose=True,
+        debug=True,
+    )
+
+    res = minimize(
+        problem,
+        algorithm,
+        ('n_gen', 50),
+        seed=1,
+        verbose=True
+    )
+
+    plot = Scatter()
+    plot.add(problem.pareto_front(), plot_type="line", color="black", alpha=0.7)
+    plot.add(res.F, color="red")
+    plot.show()
+    return
+
+
 if __name__ == "__main__":
-    QMOFZ_QNSGA2()
+    QNN_NSGA2()
