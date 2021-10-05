@@ -92,11 +92,14 @@ class DIBCO:
         pad = tf.constant([[padding, padding], [padding, padding]])
         padded_img = tf.pad(img, pad, 'CONSTANT', constant_values=0)
 
-        samples = np.zeros([img.shape[0]*img.shape[1], grid_size, grid_size])
-        for i in np.arange(img.shape[0]):
-            for j in np.arange(img.shape[1]):
-                s = padded_img[i:i+grid_size, j:j+grid_size]
-                samples[i*img.shape[1]+j] = s
+        i, j = tf.meshgrid(np.arange(img.shape[0]), np.arange(img.shape[1]), indexing="ij")
+        i = tf.reshape(i, [i.shape[0] * i.shape[1]])
+        j = tf.reshape(j, [j.shape[0] * j.shape[1]])
+        samples = tf.map_fn(
+            lambda x: padded_img[x[0]:x[0]+grid_size, x[1]:x[1]+grid_size],
+            tf.stack([i, j], axis=1),
+            dtype=tf.uint8
+        )
         return samples
 
     # -----------------------------------
