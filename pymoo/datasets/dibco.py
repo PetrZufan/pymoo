@@ -192,6 +192,9 @@ class DIBCO:
 
 
 if __name__ == "__main__":
+    import sys
+    sys.path.insert(0, "/home/zufan/git/pymoo/")
+
     dataset = DIBCO()
     # in_tr, out_tr, in_ts, out_ts = dataset.load_sampled()
     in_tr = dataset.load_sampled_in_one("H05.bmp")
