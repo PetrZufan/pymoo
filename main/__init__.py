@@ -84,7 +84,6 @@ def FZ_QIEA():
         seed=1,
         verbose=False
     )
-    print(f"result = {res.opt.get('observed')}")
 
     return
 
