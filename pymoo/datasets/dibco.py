@@ -1,9 +1,12 @@
-import sys
-sys.path.insert(0, "/home/zufan/git/pymoo/")
-
 import numpy as np
 import os
 import tensorflow as tf
+
+import sys
+
+from pymoo.datasets.util import check_filename
+
+sys.path.insert(0, "/home/zufan/git/pymoo/")
 
 from pymoo.datasets.cache import Cache
 
@@ -15,9 +18,9 @@ class DIBCO:
     _directory_out = _directory_dataset + '/DIBCO2009-GT-Test-images_handwritten_bmp'
 
     def __init__(self):
-        self._directory_dataset = self.check_dirname(DIBCO._directory_dataset)
-        self._directory_in = self.check_dirname(DIBCO._directory_in)
-        self._directory_out = self.check_dirname(DIBCO._directory_out)
+        self._directory_dataset = check_filename(DIBCO._directory_dataset, is_dir=True)
+        self._directory_in = check_filename(DIBCO._directory_in, is_dir=True)
+        self._directory_out = check_filename(DIBCO._directory_out, is_dir=True)
         self._cache = Cache(self._directory_dataset)
 
     def load_sampled(self, grid_size=25, use_cache=True, add_padding=False):
@@ -165,40 +168,12 @@ class DIBCO:
         return self.load_bmp('datasets/dibco2009/DIBCO2009-GT-Test-images_handwritten_bmp/H01.bmp')
 
     def load_bmp(self, filename):
-        filename = self.check_filename(filename)
+        filename = check_filename(filename)
         if filename is None:
             return None
         bmp_file = tf.io.read_file(filename)
         image = tf.image.decode_bmp(bmp_file)
         return image[:, :, 0]
-
-    def check_filename(self, filename):
-        if os.path.isfile(filename):
-            return filename
-        new_filename = os.path.join("../..", filename)
-        if os.path.isfile(new_filename):
-            return new_filename
-        new_filename = os.path.join("datasets", filename)
-        if os.path.isfile(new_filename):
-            return new_filename
-        new_filename = os.path.join("../../datasets", filename)
-        if os.path.isfile(new_filename):
-            return new_filename
-        return None
-
-    def check_dirname(self, dirname):
-        if os.path.isdir(dirname):
-            return dirname
-        new_dirname = os.path.join("../..", dirname)
-        if os.path.isdir(new_dirname):
-            return new_dirname
-        new_dirname = os.path.join("datasets", dirname)
-        if os.path.isdir(new_dirname):
-            return new_dirname
-        new_dirname = os.path.join("../../datasets", dirname)
-        if os.path.isdir(new_dirname):
-            return new_dirname
-        return None
 
     # ------------------------------------
 
@@ -206,5 +181,5 @@ class DIBCO:
 if __name__ == "__main__":
     dataset = DIBCO()
     # in_tr, out_tr, in_ts, out_ts = dataset.load_sampled()
-    in_tr = dataset.load_sampled_in_one("H05.bmp")
+    in_tr = dataset.load_sampled_out_one("H05.bmp")
     print("end")

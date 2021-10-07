@@ -1,13 +1,15 @@
 import os
 import pickle
 
+from pymoo.datasets.util import check_filename
+
 
 class Cache:
     cache_dir = ".cache"
     content_file = "content.p"
 
     def __init__(self, dataset_dir):
-        self.dataset_dir = self._check_dataset_dir(dataset_dir)
+        self.dataset_dir = check_filename(dataset_dir, is_dir=True)
         if self.dataset_dir is None:
             raise Exception(str(dataset_dir) + " directory not found")
         self.cache_dir = os.path.join(self.dataset_dir, Cache.cache_dir)
@@ -67,17 +69,3 @@ class Cache:
             if item == data:
                 return True
         return False
-
-    def _check_dataset_dir(self, dataset_dir):
-        if os.path.isdir(dataset_dir):
-            return dataset_dir
-        new_dir = os.path.join("../..", dataset_dir)
-        if os.path.isdir(new_dir):
-            return new_dir
-        new_dir = os.path.join("datasets", dataset_dir)
-        if os.path.isdir(new_dir):
-            return new_dir
-        new_dir = os.path.join("../../datasets", dataset_dir)
-        if os.path.isdir(new_dir):
-            return new_dir
-        return None
