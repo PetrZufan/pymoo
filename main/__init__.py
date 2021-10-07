@@ -169,6 +169,7 @@ def NN_NSGA2():
         sampling=NeuralNetworkSampling(),
         repair=SparsityRepair(),
         eliminate_duplicates=False,
+        save_hisotry=True,
     )
 
     res = minimize(
@@ -195,7 +196,7 @@ def QNN_NSGA2():
         rotation=MORealQuantumRotation(),
         eliminate_duplicates=False,
         verbose=True,
-        debug=True,
+        save_hisotry=True,
     )
 
     res = minimize(

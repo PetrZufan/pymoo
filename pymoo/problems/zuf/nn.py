@@ -38,7 +38,7 @@ class NeuralNetwork(Problem):
             self.n_var = self.size_from_weights(self.model.get_weights())
 
         # call super
-        super().__init__(n_var=self.n_var, n_obj=n_obj, xl=-10.0, xu=10.0, type_var=np.double)
+        super().__init__(n_var=self.n_var, n_obj=n_obj, xl=-1.0, xu=1.0, type_var=np.double)
 
     def load_dataset(self, dataset):
         (train_images, train_labels), (test_images, test_labels) = dataset.load_data()
@@ -55,7 +55,7 @@ class NeuralNetwork(Problem):
         f0 = np.apply_along_axis(lambda x: self.predict(x), 1, X)
 
         # get sparsity fitness
-        f1 = self.n_var - np.sum(np.abs(X) < self.zero_approximation, axis=1)
+        f1 = 1 - np.sum(np.abs(X) < self.zero_approximation, axis=1) / self.n_var
 
         # set fitnesses
         out["F"] = np.column_stack([f0, f1])
