@@ -1,3 +1,8 @@
+import sys
+sys.path.insert(0, "/home/zufan/git/pymoo/")
+
+from pymoo.datasets.dibco import DIBCO
+from pymoo.neural_network.models.binary import ModelDibcoClassifier
 from pymoo.algorithms.genetic_algorithm import GeneticAlgorithm
 from pymoo.algorithms.nsga2 import NSGA2
 from pymoo.algorithms.qiga import QIGA
@@ -214,5 +219,37 @@ def QNN_NSGA2():
     return
 
 
+def QNN_NSGA2_dibco():
+    problem = QuantumProblem(
+        classic_problem_clazz=NeuralNetwork,
+        encoding_type="real",
+        model=ModelDibcoClassifier(),
+        dataset=DIBCO()
+    )
+
+    algorithm = QNSGA2(
+        pop_size=10,
+        mutation=get_mutation("quantum_bitflip"),
+        crossover=get_crossover("real_two_point"),
+        rotation=MORealQuantumRotation(),
+        eliminate_duplicates=False,
+        verbose=True,
+        save_hisotry=True,
+    )
+
+    res = minimize(
+        problem,
+        algorithm,
+        ('n_gen', 50),
+        seed=1,
+        verbose=True
+    )
+
+    plot = Scatter()
+    plot.add(problem.pareto_front(), plot_type="line", color="black", alpha=0.7)
+    plot.add(res.F, color="red")
+    plot.show()
+    return
+
 if __name__ == "__main__":
-    QNN_NSGA2()
+    QNN_NSGA2_dibco()

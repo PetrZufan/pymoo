@@ -173,6 +173,9 @@ class DIBCO:
         image = tf.image.decode_bmp(bmp_file)
         return image[:, :, 0]
 
+    def load_data(self):
+        return self.load_sampled()
+
     # ------------------------------------
 
 
