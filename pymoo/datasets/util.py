@@ -2,6 +2,7 @@ import os
 
 
 def check_filename(filename, is_dir=False):
+    print(filename)
     if is_dir:
         isfile_fnc = os.path.isdir
     else:
@@ -10,6 +11,7 @@ def check_filename(filename, is_dir=False):
     if isfile_fnc(filename):
         return filename
     full_path = os.path.abspath(os.getcwd())
+    print(full_path)
 
     new_filename = os.path.join(full_path, filename)
     if isfile_fnc(new_filename):
