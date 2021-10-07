@@ -88,6 +88,7 @@ class DIBCO:
         sampled = self.sample(image, grid_size, add_padding)
 
         self._cache.save(sampled, cache_file)
+        return sampled
 
     def sample(self, img, grid_size=25, add_padding=False):
         padding = int(grid_size / 2)
