@@ -3,11 +3,9 @@ import os
 import tensorflow as tf
 
 import sys
-
-from pymoo.datasets.util import check_filename
-
 sys.path.insert(0, "/home/zufan/git/pymoo/")
 
+from pymoo.datasets.util import check_filename
 from pymoo.datasets.cache import Cache
 
 
