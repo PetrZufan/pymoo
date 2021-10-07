@@ -107,7 +107,6 @@ def simple_QIEA():
         seed=1,
         verbose=True,
     )
-    print(f"result = {res.opt.get('observed')}")
 
     return
 
@@ -131,7 +130,6 @@ def simple_QIEA_bcr():
         seed=1,
         verbose=True,
     )
-    print(f"result = {res.opt.get('observed')}")
 
     return
 
