@@ -24,11 +24,13 @@ class DIBCO:
     def load_sampled(self, grid_size=25, use_cache=True, add_padding=False):
         tr_file = "H05.bmp"
         in_tr = self.load_sampled_in_one(tr_file, grid_size, use_cache, add_padding)
-        out_tr = self.load_sampled_out_one(tr_file, grid_size, use_cache, add_padding)
+        out_tr = self.load_out_one(tr_file, use_cache)
+        out_tr = out_tr[grid_size:-1*grid_size, grid_size:-1*grid_size] if not add_padding else out_tr
         ts_file = "H04.bmp"
         in_ts = self.load_sampled_in_one(ts_file, grid_size, use_cache, add_padding)
-        out_ts = self.load_sampled_out_one(ts_file, grid_size, use_cache, add_padding)
-        return in_tr, out_tr, in_ts, out_ts
+        out_ts = self.load_out_one(ts_file, use_cache)
+        out_ts = out_ts[grid_size:-1 * grid_size, grid_size:-1 * grid_size] if not add_padding else out_ts
+        return (in_tr, out_tr), (in_ts, out_ts)
 
     def load_sampled_in_first(self, count=1, grid_size=25, use_cache=True, add_padding=False):
         images = []
