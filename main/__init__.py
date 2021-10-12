@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, "/home/zufan/git/pymoo/main/")
+sys.path.insert(0, "/home/zufan/git/pymoo/")
 
 from main.results import Results
 from pymoo.datasets.dibco import DIBCO
