@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import tensorflow as tf
+import tensorflow_io as tf_io
 
 import sys
 sys.path.insert(0, "/home/zufan/git/pymoo/")
@@ -22,11 +23,11 @@ class DIBCO:
         self._cache = Cache(self._directory_dataset)
 
     def load_sampled(self, grid_size=25, use_cache=True, add_padding=False):
-        tr_file = "H05.bmp"
+        tr_file = "H06.bmp"
         in_tr = self.load_sampled_in_one(tr_file, grid_size, use_cache, add_padding)
         out_tr = self.load_out_one(tr_file, use_cache)
         out_tr = out_tr[grid_size:-1*grid_size, grid_size:-1*grid_size] if not add_padding else out_tr
-        ts_file = "H04.bmp"
+        ts_file = "H07.bmp"
         in_ts = self.load_sampled_in_one(ts_file, grid_size, use_cache, add_padding)
         out_ts = self.load_out_one(ts_file, use_cache)
         out_ts = out_ts[grid_size:-1 * grid_size, grid_size:-1 * grid_size] if not add_padding else out_ts
@@ -162,10 +163,10 @@ class DIBCO:
     # --------------------------------------
 
     def load_in_first(self):
-        return self.load_bmp('datasets/dibco2009/DIBC02009_Test_images-handwritten/H01.bmp')
+        return self.load_bmp('datasets/dibco2009/DIBC02009_Test_images-handwritten/H05.bmp')
 
     def load_out_first(self):
-        return self.load_bmp('datasets/dibco2009/DIBCO2009-GT-Test-images_handwritten_bmp/H01.bmp')
+        return self.load_bmp('datasets/dibco2009/DIBCO2009-GT-Test-images_handwritten_bmp/H05.bmp')
 
     def load_bmp(self, filename):
         filename = check_filename(filename)
@@ -175,14 +176,34 @@ class DIBCO:
         image = tf.image.decode_bmp(bmp_file)
         return image[:, :, 0]
 
+    def load_bmp_3d(self, filename):
+        filename = check_filename(filename)
+        if filename is None:
+            return None
+        bmp_file = tf.io.read_file(filename)
+        image = tf.image.decode_bmp(bmp_file)
+        return image
+
     def load_data(self):
         return self.load_sampled()
 
     # ------------------------------------
 
 
+def crop_image(filein, fileout, h_offset, w_offset, height, width):
+    # filein = '../datasets/dibco2009/DIBCO2009-GT-Test-images_handwritten_bmp/H05.bmp'
+    # fileout = '../datasets/dibco2009/DIBCO2009-GT-Test-images_handwritten_bmp/H06.bmp'
+    in5 = dataset.load_bmp_3d(filein)
+    # in6 = tf.image.crop_to_bounding_box(in5, 70, 80, 600, 600)
+    in6 = tf.image.crop_to_bounding_box(in5, h_offset, w_offset, height, width)
+    content = tf_io.image.encode_bmp(in6)
+    tf.io.write_file(fileout, content)
+
+
 if __name__ == "__main__":
     dataset = DIBCO()
-    # in_tr, out_tr, in_ts, out_ts = dataset.load_sampled()
-    in_tr = dataset.load_sampled_out_one("H05.bmp")
+    # fin = '../../datasets/dibco2009/DIBC02009_Test_images-handwritten/H04.bmp'
+    # fout = '../../datasets/dibco2009/DIBC02009_Test_images-handwritten/H07.bmp'
+    # crop_image(fin, fout, 150, 0, 380, 1060)
+    in_tr, out_tr, in_ts, out_ts = dataset.load_sampled()
     print("end")
