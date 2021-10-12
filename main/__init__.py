@@ -232,8 +232,6 @@ def QNN_NSGA2_dibco(pop_size=10, generations=50):
         crossover=get_crossover("real_two_point"),
         rotation=MORealQuantumRotation(),
         eliminate_duplicates=False,
-        verbose=True,
-        save_hisotry=True,
         callback=SaveProgressCallback()
     )
 
@@ -242,7 +240,7 @@ def QNN_NSGA2_dibco(pop_size=10, generations=50):
         algorithm,
         ('n_gen', generations),
         seed=1,
-        verbose=True,
+        verbose=False,
         save_history=True
     )
 
