@@ -56,7 +56,10 @@ class NeuralNetwork(Problem):
         return (train_images, train_labels), (test_images, test_labels)
 
     def get_batch(self, data_in, data_out, batch_size):
-        select = np.random.randint(0, data_in.shape[0]-1, batch_size)
+        rnd_batch = np.random.randint(0, data_in.shape[0]-1, batch_size)
+        select = np.zeros(data_in.shape[0])
+        for i in rnd_batch:
+            select[i] = 1
         return data_in[select], data_out[select]
 
     def _evaluate(self, X, out, *args, **kwargs):
