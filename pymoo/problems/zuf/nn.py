@@ -60,7 +60,7 @@ class NeuralNetwork(Problem):
         select = np.zeros(data_in.shape[0])
         for i in rnd_batch:
             select[i] = 1
-        return data_in[select], data_out[select]
+        return data_in[select, :, :], data_out[select, :, :]
 
     def _evaluate(self, X, out, *args, **kwargs):
         # get loss fitness
