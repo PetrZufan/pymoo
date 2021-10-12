@@ -53,14 +53,13 @@ class NeuralNetwork(Problem):
         (train_images, train_labels), (test_images, test_labels) = dataset.load_data()
         train_images = tf.cast(train_images, dtype=tf.float32) / 255.0
         test_images = tf.cast(test_images, dtype=tf.float32) / 255.0
+        train_labels = tf.cast(train_labels, dtype=tf.float32) / 255.0
+        test_labels = tf.cast(test_labels, dtype=tf.float32) / 255.0
         return (train_images, train_labels), (test_images, test_labels)
 
     def get_batch(self, data_in, data_out, batch_size):
-        rnd_batch = np.random.randint(0, data_in.shape[0]-1, batch_size)
-        select = np.zeros(data_in.shape[0])
-        for i in rnd_batch:
-            select[i] = 1
-        return data_in[select, :, :], data_out[select, :, :]
+        select = np.random.randint(0, data_in.shape[0]-1, batch_size)
+        return tf.gather(data_in, indices=select), tf.gather(data_out, indices=select)
 
     def _evaluate(self, X, out, *args, **kwargs):
         # get loss fitness

@@ -26,11 +26,13 @@ class DIBCO:
         tr_file = "H06.bmp"
         in_tr = self.load_sampled_in_one(tr_file, grid_size, use_cache, add_padding)
         out_tr = self.load_out_one(tr_file, use_cache)
-        out_tr = out_tr[grid_size:-1*grid_size, grid_size:-1*grid_size] if not add_padding else out_tr
+        out_tr = out_tr[int(grid_size/2):-1*(int(grid_size/2)+1), int(grid_size/2):-1*(int(grid_size/2)+1)] if not add_padding else out_tr # NOTE: The +1 is wrong, but dont want to resample it again
+        out_tr = tf.reshape(out_tr, [out_tr.shape[0]*out_tr.shape[1]])
         ts_file = "H07.bmp"
         in_ts = self.load_sampled_in_one(ts_file, grid_size, use_cache, add_padding)
         out_ts = self.load_out_one(ts_file, use_cache)
-        out_ts = out_ts[grid_size:-1 * grid_size, grid_size:-1 * grid_size] if not add_padding else out_ts
+        out_ts = out_ts[int(grid_size/2):-1*(int(grid_size/2)+1), int(grid_size/2):-1*(int(grid_size/2)+1)] if not add_padding else out_ts # NOTE: The +1 is wrong, but dont want to resample it again
+        out_ts = tf.reshape(out_ts, [out_ts.shape[0] * out_ts.shape[1]])
         return (in_tr, out_tr), (in_ts, out_ts)
 
     def load_sampled_in_first(self, count=1, grid_size=25, use_cache=True, add_padding=False):
@@ -104,8 +106,8 @@ class DIBCO:
             pad = tf.constant([[padding, padding], [padding, padding]])
             final_img = tf.pad(img, pad, 'CONSTANT', constant_values=0)
         else:
-            shape_x = img.shape[0] - grid_size
-            shape_y = img.shape[1] - grid_size
+            shape_x = img.shape[0] - grid_size # + 1 # NOTE: this should be correct but i dont want to sample it again
+            shape_y = img.shape[1] - grid_size # + 1 # NOTE: this should be correct but i dont want to sample it again
             final_img = img
 
         i, j = tf.meshgrid(np.arange(shape_x), np.arange(shape_y), indexing="ij")
