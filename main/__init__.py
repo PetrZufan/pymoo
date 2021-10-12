@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, "/home/zufan/git/pymoo/main/")
+
 from main.results import Results
 from pymoo.datasets.dibco import DIBCO
 from pymoo.model.callback import Callback
