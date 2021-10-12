@@ -1,5 +1,6 @@
-
+from main.results import Results
 from pymoo.datasets.dibco import DIBCO
+from pymoo.model.callback import Callback
 from pymoo.neural_network.models.binary import ModelDibcoClassifier
 from pymoo.algorithms.genetic_algorithm import GeneticAlgorithm
 from pymoo.algorithms.nsga2 import NSGA2
@@ -214,7 +215,7 @@ def QNN_NSGA2():
     return
 
 
-def QNN_NSGA2_dibco():
+def QNN_NSGA2_dibco(pop_size=10, generations=50):
     problem = QuantumProblem(
         classic_problem_clazz=NeuralNetwork,
         encoding_type="real",
@@ -223,28 +224,55 @@ def QNN_NSGA2_dibco():
     )
 
     algorithm = QNSGA2(
-        pop_size=10,
+        pop_size=pop_size,
         mutation=get_mutation("quantum_bitflip"),
         crossover=get_crossover("real_two_point"),
         rotation=MORealQuantumRotation(),
         eliminate_duplicates=False,
         verbose=True,
         save_hisotry=True,
+        callback=SaveProgressCallback()
     )
 
     res = minimize(
         problem,
         algorithm,
-        ('n_gen', 50),
+        ('n_gen', generations),
         seed=1,
-        verbose=True
+        verbose=True,
+        save_history=True
     )
+
+    storage = Results()
+    res.history.append({"opt": res.opt, "pop": res.pop})
+    storage.save_data(res.history, "res.p")
 
     plot = Scatter()
     plot.add(problem.pareto_front(), plot_type="line", color="black", alpha=0.7)
+    plot.add(res.pop.get("F"), color="blue")
     plot.add(res.F, color="red")
+
+    storage.save_graph(plot, "res.png")
+    return res
+
+
+class SaveProgressCallback(Callback):
+    def notify(self, algorithm, **kwargs):
+        storage = Results()
+        algorithm.history.append({"opt": algorithm.opt, "pop": algorithm.pop})
+        storage.save_data(algorithm.history, "progress.p")
+
+
+def plot_result(folder, file):
+    storage = Results(folder)
+    res = storage.load_data(file)
+    plot = Scatter()
+    plot.add(res[len(res)-1].get("pop").get("F"), color="blue")
+    plot.add(res[len(res)-1].get("opt").get("F"), color="red")
     plot.show()
-    return
+
 
 if __name__ == "__main__":
-    QNN_NSGA2_dibco()
+    QNN_NSGA2_dibco(50, 100)
+    #plot_result("./16395_21", "res.p")
+    exit(0)

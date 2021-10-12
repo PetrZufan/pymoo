@@ -132,7 +132,7 @@ class Problem:
 
             # if already done or it was successful - calculate the ideal point
             if self._pareto_front is not None:
-                self._ideal_point = np.max(self._pareto_front, axis=0)
+                self._nadir_point = np.max(self._pareto_front, axis=0)
 
         return self._nadir_point
 

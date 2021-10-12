@@ -338,7 +338,7 @@ class Algorithm:
             _hist, _callback = self.history, self.callback
 
             self.history, self.callback = None, None
-            obj = copy.deepcopy(self)
+            obj = copy.deepcopy({"opt": self.opt, "pop": self.pop})
 
             self.history, self.callback = _hist, _callback
             self.history.append(obj)

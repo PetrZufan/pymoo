@@ -4,6 +4,7 @@ import pickle
 from pymoo.datasets.util import check_filename
 
 
+# TODO: Too coomplicated. content.p not needed. Checking the file existence is enough.
 class Cache:
     cache_dir = ".cache"
     content_file = "content.p"
