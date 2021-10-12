@@ -42,8 +42,8 @@ class NeuralNetwork(Problem):
 
     def load_dataset(self, dataset):
         (train_images, train_labels), (test_images, test_labels) = dataset.load_data()
-        train_images = train_images / 255.0
-        test_images = test_images / 255.0
+        train_images = tf.cast(train_images, dtype=tf.float32) / 255.0
+        test_images = tf.cast(test_images, dtype=tf.float32) / 255.0
         return (train_images, train_labels), (test_images, test_labels)
 
     def get_batch(self, data_in, data_out, batch_size):
