@@ -1,8 +1,8 @@
 #!/bin/bash
 #PBS -q qexp
 #PBS -N pymoo
-#PBS -l select=1:ncpus=128:mpiprocs=128,walltime=1:00:00
-#PBS -J 1
+#PBS -l select=1:ncpus=36:mpiprocs=36,walltime=1:00:00
+#PBS -J 1-3
 #PBS -A OPEN-17-39
 
 # Fronta qexp (nastavena vyse parametrem -q) neodecita hodiny z projektu,
