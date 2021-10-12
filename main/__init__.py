@@ -1,5 +1,3 @@
-import sys
-sys.path.insert(0, "/home/zufan/git/pymoo/")
 
 from pymoo.datasets.dibco import DIBCO
 from pymoo.neural_network.models.binary import ModelDibcoClassifier
