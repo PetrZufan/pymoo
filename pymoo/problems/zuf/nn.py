@@ -13,7 +13,8 @@ class NeuralNetwork(Problem):
         n_var=None, # None means auto deduce
         n_obj=2,
         zero_approximation=0.0001,
-        model=ModelMnistClassifier,
+        model_clazz=None,
+        model=None,
         dataset=tf.keras.datasets.mnist,
         loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
     ):
@@ -24,8 +25,16 @@ class NeuralNetwork(Problem):
         (self.train_ins, self.train_outs), (self.test_ins, self.test_outs) = self.load_dataset(self.dataset)
 
         # setup model
-        self.model_clazz = model
-        self.model = model()
+        if (model is None) and (model_clazz is not None ):
+            self.model_clazz = model_clazz
+            self.model = model_clazz()
+        if (model is not None) and (model_clazz is None):
+            self.model_clazz = model.__class__
+            self.model = model
+        if (model is None) and (model_clazz is None):
+            raise Exception("Both model and model_clazz cannot be None. Please define at least one of them.")
+        if (model is not None) and (model_clazz is not None) and (model.__class__ != model_clazz):
+            raise Exception("model's class and model_clazz doesn't match. If not sure, define only one of them.")
         self.model.trainable = False
 
         # setup loss function
