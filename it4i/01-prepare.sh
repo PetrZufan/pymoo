@@ -7,6 +7,6 @@ pip install autograd --user
 pip install scipy --user
 pip install matplotlib --user
 
-# run in repo root directory (eg ~/fit/git/pymoo/)
-make compile
-pip install . --user
+# TODO: run in repo root directory (eg ~/fit/git/pymoo/)
+# make compile
+pip install ../ --user

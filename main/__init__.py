@@ -286,7 +286,7 @@ def final_images(result):
     cl_problem = result.problem.classic_problem
     images_data = np.apply_along_axis(lambda x: cl_problem.get_test_outs(x), 1, result.opt.get("observed"))
     for i, d in enumerate(images_data):
-        filename = str(os.getpid()) + "_final_" + str(i) + ".bmp"
+        filename = str(os.getpid()) + "_final_test_" + str(i) + ".bmp"
         file = os.path.join(Results().get_results_file(), filename)
         cl_problem.dataset.save_image(file, d, is_normalized=True, reshape_to=cl_problem.dataset.shape_ts)
 

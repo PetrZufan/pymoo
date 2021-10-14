@@ -238,5 +238,19 @@ if __name__ == "__main__":
     # fin = '../../datasets/dibco2009/DIBC02009_Test_images-handwritten/H04.bmp'
     # fout = '../../datasets/dibco2009/DIBC02009_Test_images-handwritten/H07.bmp'
     # crop_image(fin, fout, 150, 0, 380, 1060)
-    in_tr, out_tr, in_ts, out_ts = dataset.load_sampled()
+
+    # in_tr, out_tr, in_ts, out_ts = dataset.load_sampled()
+
+    #dataset.load_sampled(grid_size=3)
+    dataset.load_sampled(grid_size=5)
+    dataset.load_sampled(grid_size=7)
+    #dataset.load_sampled(grid_size=9)
+    dataset.load_sampled(grid_size=11)
+    #dataset.load_sampled(grid_size=13)
+    dataset.load_sampled(grid_size=15)
+    #dataset.load_sampled(grid_size=17)
+    #dataset.load_sampled(grid_size=19)
+    dataset.load_sampled(grid_size=21)
+    #dataset.load_sampled(grid_size=23)
+
     print("end")
