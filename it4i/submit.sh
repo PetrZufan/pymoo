@@ -22,8 +22,9 @@
 # a potrebujete je vsechny ukoncit, provedete to spustenim skriptu qdel.sh
 # v podadresari src1.
 
+ml OpenMPI
 ml Python/3.9.5-GCCcore-10.3.0
 
 cd $PBS_O_WORKDIR
 
-python ../main/__init__.py
+mpiexec python ../main/__init__.py
