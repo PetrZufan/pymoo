@@ -1,5 +1,11 @@
+import os
 import sys
+
+from tensorflow.python.keras.losses import BinaryCrossentropy
+
 sys.path.insert(0, "/home/zufan/git/pymoo/")
+
+import numpy as np
 
 from main.results import Results
 from pymoo.datasets.dibco import DIBCO
@@ -223,7 +229,8 @@ def QNN_NSGA2_dibco(pop_size=10, generations=50):
         classic_problem_clazz=NeuralNetwork,
         encoding_type="real",
         model=ModelDibcoClassifier(),
-        dataset=DIBCO()
+        dataset=DIBCO(),
+        loss=BinaryCrossentropy()
     )
 
     algorithm = QNSGA2(
@@ -239,7 +246,7 @@ def QNN_NSGA2_dibco(pop_size=10, generations=50):
         problem,
         algorithm,
         ('n_gen', generations),
-        seed=1,
+        seed=None,
         verbose=False,
         save_history=True
     )
@@ -252,8 +259,10 @@ def QNN_NSGA2_dibco(pop_size=10, generations=50):
     plot.add(problem.pareto_front(), plot_type="line", color="black", alpha=0.7)
     plot.add(res.pop.get("F"), color="blue")
     plot.add(res.F, color="red")
-
     storage.save_graph(plot, "res.png")
+
+    final_images(res)
+
     return res
 
 
@@ -271,6 +280,15 @@ def plot_result(folder, file):
     plot.add(res[len(res)-1].get("pop").get("F"), color="blue")
     plot.add(res[len(res)-1].get("opt").get("F"), color="red")
     plot.show()
+
+
+def final_images(result):
+    cl_problem = result.problem.classic_problem
+    images_data = np.apply_along_axis(lambda x: cl_problem.get_test_outs(x), 1, result.opt.get("observed"))
+    for i, d in enumerate(images_data):
+        filename = str(os.getpid()) + "_final_" + str(i) + ".bmp"
+        file = os.path.join(Results().get_results_file(), filename)
+        cl_problem.dataset.save_image(file, d, is_normalized=True, reshape_to=cl_problem.dataset.shape_ts)
 
 
 if __name__ == "__main__":

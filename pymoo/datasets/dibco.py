@@ -19,17 +19,51 @@ class DIBCO:
         self._directory_out = check_filename(DIBCO._directory_out, is_dir=True)
         self._cache = Cache(self._directory_dataset)
 
+        self.loaded = False
+        self.in_tr = None
+        self.out_tr = None
+        self.in_ts = None
+        self.out_ts = None
+        self.shape_tr = None
+        self.shape_ts = None
+
+    def to_image(self, data, is_normalized=False, reshape_to=None):
+        if is_normalized:
+            data = data * 255.0
+        data = tf.cast(data, tf.uint8)
+        data = tf.stack([data, data, data], axis=1)
+        if reshape_to is not None:
+            data = tf.reshape(data, tf.concat([reshape_to, [3]], axis=0))
+        return data
+
+    def save_image(self, filename, data, is_normalized=False, reshape_to=None):
+        data = tf.constant(data)
+        data = self.to_image(data, is_normalized, reshape_to)
+        content = tf_io.image.encode_bmp(data)
+        tf.io.write_file(filename, content)
+
+    # ------------------------------------------------------------
+
     def load_sampled(self, grid_size=25, use_cache=True, add_padding=False):
         tr_file = "H06.bmp"
         in_tr = self.load_sampled_in_one(tr_file, grid_size, use_cache, add_padding)
         out_tr = self.load_out_one(tr_file, use_cache)
         out_tr = out_tr[int(grid_size/2):-1*(int(grid_size/2)+1), int(grid_size/2):-1*(int(grid_size/2)+1)] if not add_padding else out_tr # NOTE: The +1 is wrong, but dont want to resample it again
+        shape_tr = out_tr.shape
         out_tr = tf.reshape(out_tr, [out_tr.shape[0]*out_tr.shape[1]])
         ts_file = "H07.bmp"
         in_ts = self.load_sampled_in_one(ts_file, grid_size, use_cache, add_padding)
         out_ts = self.load_out_one(ts_file, use_cache)
         out_ts = out_ts[int(grid_size/2):-1*(int(grid_size/2)+1), int(grid_size/2):-1*(int(grid_size/2)+1)] if not add_padding else out_ts # NOTE: The +1 is wrong, but dont want to resample it again
+        shape_ts = out_ts.shape
         out_ts = tf.reshape(out_ts, [out_ts.shape[0] * out_ts.shape[1]])
+
+        self.in_tr = in_tr
+        self.out_tr = out_tr
+        self.shape_tr = shape_tr
+        self.in_ts = in_ts
+        self.out_ts = out_ts
+        self.shape_ts = shape_ts
         return (in_tr, out_tr), (in_ts, out_ts)
 
     def load_sampled_in_first(self, count=1, grid_size=25, use_cache=True, add_padding=False):

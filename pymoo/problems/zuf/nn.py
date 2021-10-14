@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+import copy
 from pymoo.model.problem import Problem
 from pymoo.model.repair import Repair
 from pymoo.model.sampling import Sampling
@@ -66,7 +67,7 @@ class NeuralNetwork(Problem):
 
     def _evaluate(self, X, out, *args, **kwargs):
         # get loss fitness
-        f0 = np.apply_along_axis(lambda x: self.predict(x), 1, X)
+        f0 = np.apply_along_axis(lambda x: self.get_loss(x), 1, X)
 
         # get sparsity fitness
         f1 = 1 - np.sum(np.abs(X) < self.zero_approximation, axis=1) / self.n_var
@@ -74,11 +75,18 @@ class NeuralNetwork(Problem):
         # set fitnesses
         out["F"] = np.column_stack([f0, f1])
 
-    def predict(self, X):
-        weights = self.x_to_weights(X, self.model.get_weights())
+    def get_test_outs(self, x):
+        return self.predict(x, self.test_ins)
+
+    def predict(self, x, ins):
+        weights = self.x_to_weights(x, self.model.get_weights())
         self.model.set_weights(weights=weights)
-        ins, referrals = self.get_batch(self.train_ins, self.train_outs, 10)
-        predictions = self.model.predict(ins)
+        preds = self.model.predict(ins)
+        return self.model.fix_predictions(preds)
+
+    def get_loss(self, x):
+        ins, referrals = self.get_batch(self.train_ins, self.train_outs, self.batch_size)
+        predictions = self.predict(x, ins)
         return self.loss(referrals, predictions).numpy()
 
     def x_to_weights(self, list1, list2, last=0):

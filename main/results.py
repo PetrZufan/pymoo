@@ -29,3 +29,6 @@ class Results:
     def save_graph(self, plot, filename):
         file = os.path.join(self.folder, filename)
         plot.save(file)
+
+    def get_results_file(self):
+        return self.folder
