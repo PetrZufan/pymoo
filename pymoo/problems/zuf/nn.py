@@ -15,10 +15,12 @@ class NeuralNetwork(Problem):
         zero_approximation=0.0001,
         model_clazz=None,
         model=None,
+        batch_size=64,
         dataset=tf.keras.datasets.mnist,
         loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
     ):
         self.zero_approximation = zero_approximation
+        self.batch_size = batch_size
 
         # load data
         self.dataset = dataset
@@ -58,7 +60,8 @@ class NeuralNetwork(Problem):
         return (train_images, train_labels), (test_images, test_labels)
 
     def get_batch(self, data_in, data_out, batch_size):
-        select = np.random.randint(0, data_in.shape[0]-1, batch_size)
+        batch = batch_size if batch_size is not None else self.batch_size
+        select = np.random.randint(0, data_in.shape[0]-1, batch)
         return tf.gather(data_in, indices=select), tf.gather(data_out, indices=select)
 
     def _evaluate(self, X, out, *args, **kwargs):
