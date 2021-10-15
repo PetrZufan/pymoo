@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 
-program = "../../main/__init__.py"
+program = "../../../main/__init__.py"
 path = "./results"
 
 variants = {
@@ -32,7 +32,7 @@ test = {
 
 
 def make_cmd(folder, p, a):
-    text = "#!/bin/bash\n\n" + "ml Python/3.9.5-GCCcore-10.3.0\n" + "echo \" " + p + " " + a + "\"\n"
+    text = "#!/bin/bash\n\n" + "ml Python/3.9.5-GCCcore-10.3.0\n" + "python " + p + " " + a + "\n"
     file = "run.sh"
     with open(file, 'w') as f:
         f.write(text)
@@ -50,6 +50,7 @@ for name, args in test.items():
     shutil.copyfile("###QSUB.SH", os.path.join(folder, "###QSUB.SH"))
     os.chdir(folder)
     make_cmd(folder, program, args)
+    subprocess.call(['chmod', '+x', 'submit.sh'])
     subprocess.call(['chmod', '+x', '###QSUB.SH'])
     subprocess.call(['./###QSUB.SH', program, args])
     os.chdir("../../")
