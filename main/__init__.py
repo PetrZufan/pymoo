@@ -306,6 +306,7 @@ def final_images(result, is_train=False, is_quantum=False):
 
 def run(algorithm, population, generations, grid, batch):
     seed = random.SystemRandom().randint(0, 100000)
+    seed = None
     if (algorithm == "bp"):
         return # TODO: back propagation
 
