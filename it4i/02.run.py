@@ -6,21 +6,21 @@ program = "../../../main/__init__.py"
 path = "./results"
 
 variants = {
-    "ga_p50_g100_r25_b64": "-a ga -p 50 -g 100 -r 25 -b 64",
-    "ga_p50_g100_r11_b64": "-a ga -p 50 -g 100 -r 11 -b 64",
-    "ga_p50_g100_r5_b64": "-a ga -p 50 -g 100 -r 5 -b 64",
+    "ga_p50_g100_r25_b64": "-a ga -p 50 -g 200 -r 25 -b 64",
+    "ga_p50_g100_r11_b64": "-a ga -p 50 -g 200 -r 11 -b 64",
+    "ga_p50_g100_r5_b64": "-a ga -p 50 -g 200 -r 5 -b 64",
 
-    "qiga_p50_g100_r25_b64": "-a qiga -p 50 -g 100 -r 25 -b 64",
-    "qiga_p50_g100_r11_b64": "-a qiga -p 50 -g 100 -r 11 -b 64",
-    "qiga_p50_g100_r5_b64": "-a qiga -p 50 -g 100 -r 5 -b 64",
+    "qiga_p50_g100_r25_b64": "-a qiga -p 50 -g 200 -r 25 -b 64",
+    "qiga_p50_g100_r11_b64": "-a qiga -p 50 -g 200 -r 11 -b 64",
+    "qiga_p50_g100_r5_b64": "-a qiga -p 50 -g 200 -r 5 -b 64",
 
-    "nsga2_p50_g100_r25_b64": "-a nsga2 -p 50 -g 100 -r 25 -b 64",
-    "nsga2_p50_g100_r11_b64": "-a nsga2 -p 50 -g 100 -r 11 -b 64",
-    "nsga2_p50_g100_r5_b64": "-a nsga2 -p 50 -g 100 -r 5 -b 64",
+    "nsga2_p50_g100_r25_b64": "-a nsga2 -p 50 -g 200 -r 25 -b 64",
+    "nsga2_p50_g100_r11_b64": "-a nsga2 -p 50 -g 200 -r 11 -b 64",
+    "nsga2_p50_g100_r5_b64": "-a nsga2 -p 50 -g 200 -r 5 -b 64",
 
-    "gnsga2_p50_g100_r25_b64": "-a gnsga2 -p 50 -g 100 -r 25 -b 64",
-    "gnsga2_p50_g100_r11_b64": "-a gnsga2 -p 50 -g 100 -r 11 -b 64",
-    "gnsga2_p50_g100_r5_b64": "-a gnsga2 -p 50 -g 100 -r 5 -b 64"
+    "gnsga2_p50_g100_r25_b64": "-a gnsga2 -p 50 -g 200 -r 25 -b 64",
+    "gnsga2_p50_g100_r11_b64": "-a gnsga2 -p 50 -g 200 -r 11 -b 64",
+    "gnsga2_p50_g100_r5_b64": "-a gnsga2 -p 50 -g 200 -r 5 -b 64"
 }
 
 test = {
