@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import time
 
 program = "../../../main/__init__.py"
 path = "./results"
@@ -44,6 +45,11 @@ if not os.path.isdir(path):
 
 # TODO test to variants
 for name, args in variants.items():
+    result = subprocess.run(['sh', './my_jobs_list.sh'], stdout=subprocess.PIPE)
+    while not result.stdout == "":
+        time.sleep(10)
+        result = subprocess.run(['sh', './my_jobs_list.sh'], stdout=subprocess.PIPE)
+
     folder = os.path.join(path, name)
     os.mkdir(folder)
     shutil.copyfile("submit.sh", os.path.join(folder, "submit.sh"))
