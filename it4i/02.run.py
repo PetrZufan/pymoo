@@ -43,7 +43,7 @@ if not os.path.isdir(path):
     os.mkdir(path)
 
 # TODO test to variants
-for name, args in test.items():
+for name, args in variants.items():
     folder = os.path.join(path, name)
     os.mkdir(folder)
     shutil.copyfile("submit.sh", os.path.join(folder, "submit.sh"))
