@@ -33,11 +33,10 @@ test = {
 
 def make_cmd(folder, p, a):
     text = "#!/bin/bash\n\n" + "ml Python/3.9.5-GCCcore-10.3.0\n" + "echo \" " + p + " " + a + "\"\n"
-    file = os.path.join(folder, "run.sh")
-    subprocess.call(['touch', file])
+    file = "run.sh"
     with open(file, 'w') as f:
         f.write(text)
-    subprocess.call(['chmod', '+x', 'run.sh'])
+    subprocess.call(['chmod', '+x', file])
 
 
 if not os.path.isdir(path):
