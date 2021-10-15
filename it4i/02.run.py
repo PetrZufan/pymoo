@@ -36,8 +36,8 @@ if not os.path.isdir(path):
 for name, args in test.items():
     folder = os.path.join(path, name)
     os.mkdir(folder)
-    shutil.copyfile("submit.sh", folder)
-    shutil.copyfile("###QSUB.SH", folder)
+    shutil.copyfile("submit.sh", os.path.join(folder, "submit.sh"))
+    shutil.copyfile("###QSUB.SH", os.path.join(folder, "###QSUB.SH"))
     os.chdir(folder)
     subprocess.call(['./###QSUB.SH', program, args])
     os.chdir("../../")
