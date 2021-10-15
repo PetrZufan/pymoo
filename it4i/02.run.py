@@ -57,6 +57,6 @@ for name, args in variants.items():
     make_cmd(folder, program, args)
     subprocess.call(['chmod', '+x', 'submit.sh'])
     subprocess.call(['chmod', '+x', '###QSUB.SH'])
-    subprocess.call(['./###QSUB.SH', program, args])
+#    subprocess.call(['./###QSUB.SH'])
     os.chdir("../../")
 
