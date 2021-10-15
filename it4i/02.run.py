@@ -50,7 +50,7 @@ for name, args in test.items():
     shutil.copyfile("###QSUB.SH", os.path.join(folder, "###QSUB.SH"))
     os.chdir(folder)
     make_cmd(folder, program, args)
-    subprocess.call(['./###QSUB.SH', program, args])
     subprocess.call(['chmod', '+x', '###QSUB.SH'])
+    subprocess.call(['./###QSUB.SH', program, args])
     os.chdir("../../")
 
