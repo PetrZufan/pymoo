@@ -39,5 +39,6 @@ for name, args in test.items():
     shutil.copyfile("submit.sh", os.path.join(folder, "submit.sh"))
     shutil.copyfile("###QSUB.SH", os.path.join(folder, "###QSUB.SH"))
     os.chdir(folder)
+    subprocess.call(['chmod', '+x', './###QSUB.SH'])
     subprocess.call(['./###QSUB.SH', program, args])
     os.chdir("../../")
