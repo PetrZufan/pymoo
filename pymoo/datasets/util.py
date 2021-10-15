@@ -31,6 +31,22 @@ def check_filename(filename, is_dir=False):
     if isfile_fnc(new_filename):
         return new_filename
 
+    new_filename = os.path.join("../../../", filename)
+    if isfile_fnc(new_filename):
+        return new_filename
+
+    new_filename = os.path.join(full_path, "../../../", filename)
+    if isfile_fnc(new_filename):
+        return new_filename
+
+    new_filename = os.path.join("../../../../", filename)
+    if isfile_fnc(new_filename):
+        return new_filename
+
+    new_filename = os.path.join(full_path, "../../../../", filename)
+    if isfile_fnc(new_filename):
+        return new_filename
+
     new_filename = os.path.join("datasets", filename)
     if os.path.isdir(new_filename):
         return new_filename
@@ -52,6 +68,22 @@ def check_filename(filename, is_dir=False):
         return new_filename
 
     new_filename = os.path.join(full_path, "../../datasets", filename)
+    if os.path.isdir(new_filename):
+        return new_filename
+
+    new_filename = os.path.join("../../../datasets", filename)
+    if os.path.isdir(new_filename):
+        return new_filename
+
+    new_filename = os.path.join(full_path, "../../../datasets", filename)
+    if os.path.isdir(new_filename):
+        return new_filename
+
+    new_filename = os.path.join("../../../../datasets", filename)
+    if os.path.isdir(new_filename):
+        return new_filename
+
+    new_filename = os.path.join(full_path, "../../../../datasets", filename)
     if os.path.isdir(new_filename):
         return new_filename
 
