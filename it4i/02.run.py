@@ -33,7 +33,7 @@ if not os.path.isdir(path):
     os.mkdir(path)
 
 # TODO test to variants
-for name, args in test:
+for name, args in test.items():
     folder = os.path.join(path, name)
     os.mkdir(folder)
     shutil.copyfile("submit.sh", folder)
@@ -41,6 +41,3 @@ for name, args in test:
     os.chdir(folder)
     subprocess.call(['./###QSUB.SH', program, args])
     os.chdir("../../")
-
-
-

@@ -27,4 +27,6 @@ ml Python/3.9.5-GCCcore-10.3.0
 
 cd $PBS_O_WORKDIR
 
-mpiexec python $@
+echo $@
+
+# mpiexec python $@
