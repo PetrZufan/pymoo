@@ -3,7 +3,7 @@
 rm -f *.o
 rm -f CAE.*
 echo -ne "qdel " > "#QDEL.SH"
-ident=`qsub ./submit.sh`
+ident=`qsub ./submit.sh $@`
 echo $ident >> "#QDEL.SH"
 chmod +x "#QDEL.SH"
 echo -ne "qstat -a " > "##QSTAT.SH"

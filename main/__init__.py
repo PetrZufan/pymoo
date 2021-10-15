@@ -263,9 +263,6 @@ def QNN_NSGA2_dibco(pop_size=10, generations=50):
     plot.add(res.F, color="red")
     storage.save_graph(plot, "res.png")
 
-    final_images(res, is_train=True)
-    final_images(res, is_train=False)
-
     return res
 
 
@@ -410,8 +407,8 @@ def run(algorithm, population, generations, grid, batch):
     # plot.add(res.F, color="red")
     # storage.save_graph(plot, "res.png")
 
-    final_images(res, is_train=True)
-    final_images(res, is_train=False)
+    final_images(res, is_train=True, is_quantum=is_quantum)
+    final_images(res, is_train=False, is_quantum=is_quantum)
 
     return res
 
