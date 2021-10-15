@@ -46,9 +46,11 @@ if not os.path.isdir(path):
 # TODO test to variants
 for name, args in variants.items():
     result = subprocess.run(['sh', './my_jobs_list.sh'], stdout=subprocess.PIPE)
+    print(result.stdout)
     while not result.stdout == "":
         time.sleep(10)
         result = subprocess.run(['sh', './my_jobs_list.sh'], stdout=subprocess.PIPE)
+        print(result.stdout)
 
     folder = os.path.join(path, name)
     os.mkdir(folder)
