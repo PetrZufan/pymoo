@@ -30,5 +30,10 @@ class Results:
         file = os.path.join(self.folder, filename)
         plot.save(file)
 
+    def save_text(self, text, filename):
+        file = os.path.join(self.folder, filename)
+        with open(file, 'w') as f:
+            f.write(text)
+
     def get_results_file(self):
         return self.folder

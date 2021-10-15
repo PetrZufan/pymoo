@@ -18,14 +18,16 @@ class NeuralNetwork(Problem):
         model=None,
         batch_size=64,
         dataset=tf.keras.datasets.mnist,
+        grid_size=11,
         loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
     ):
         self.zero_approximation = zero_approximation
         self.batch_size = batch_size
+        self.grid_size = grid_size
 
         # load data
         self.dataset = dataset
-        (self.train_ins, self.train_outs), (self.test_ins, self.test_outs) = self.load_dataset(self.dataset)
+        (self.train_ins, self.train_outs), (self.test_ins, self.test_outs) = self.load_dataset(self.dataset, self.grid_size)
 
         # setup model
         if (model is None) and (model_clazz is not None ):
@@ -52,8 +54,8 @@ class NeuralNetwork(Problem):
         # call super
         super().__init__(n_var=self.n_var, n_obj=n_obj, xl=-1.0, xu=1.0, type_var=np.double)
 
-    def load_dataset(self, dataset):
-        (train_images, train_labels), (test_images, test_labels) = dataset.load_data()
+    def load_dataset(self, dataset, grid_size):
+        (train_images, train_labels), (test_images, test_labels) = dataset.load_data(grid_size)
         train_images = tf.cast(train_images, dtype=tf.float32) / 255.0
         test_images = tf.cast(test_images, dtype=tf.float32) / 255.0
         train_labels = tf.cast(train_labels, dtype=tf.float32) / 255.0
@@ -68,15 +70,25 @@ class NeuralNetwork(Problem):
     def _evaluate(self, X, out, *args, **kwargs):
         # get loss fitness
         f0 = np.apply_along_axis(lambda x: self.get_loss(x), 1, X)
+        if self.n_obj == 1:
+            out["F"] = f0
+            return
 
         # get sparsity fitness
-        f1 = 1 - np.sum(np.abs(X) < self.zero_approximation, axis=1) / self.n_var
+        # f1 = 1 - np.sum(np.abs(X) < self.zero_approximation, axis=1) / self.n_var  # in 0.01% (form 0 to 1)
+        f1 = self.n_var - np.sum(np.abs(X) < self.zero_approximation, axis=1)        # real count of non zero weights
+        if self.n_obj == 2:
+            out["F"] = np.column_stack([f0, f1])
+            return
 
-        # set fitnesses
-        out["F"] = np.column_stack([f0, f1])
+    def get_outs(self, x, is_train=False):
+        return self.get_train_outs(x) if is_train else self.get_test_outs(x)
 
     def get_test_outs(self, x):
         return self.predict(x, self.test_ins)
+
+    def get_train_outs(self, x):
+        return self.predict(x, self.train_ins)
 
     def predict(self, x, ins):
         weights = self.x_to_weights(x, self.model.get_weights())
