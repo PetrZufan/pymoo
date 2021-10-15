@@ -43,14 +43,11 @@ def make_cmd(folder, p, a):
 if not os.path.isdir(path):
     os.mkdir(path)
 
-# TODO test to variants
 for name, args in variants.items():
     result = subprocess.run(['sh', './my_jobs_list.sh'], stdout=subprocess.PIPE)
-    print(result.stdout)
-    while not result.stdout == "":
+    while len(result.stdout) > 5:
         time.sleep(10)
         result = subprocess.run(['sh', './my_jobs_list.sh'], stdout=subprocess.PIPE)
-        print(result.stdout)
 
     folder = os.path.join(path, name)
     os.mkdir(folder)
