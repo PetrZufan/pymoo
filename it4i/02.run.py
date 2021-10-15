@@ -4,6 +4,7 @@ import subprocess
 
 program = "../../main/__init__.py"
 path = "./results"
+
 variants = {
     "ga_p50_g100_r25_b64": "-a ga -p 50 -g 100 -r 25 -b 64",
     "ga_p50_g100_r11_b64": "-a ga -p 50 -g 100 -r 11 -b 64",
@@ -29,6 +30,15 @@ test = {
     "nsga2_p5_g5_r11_b64": "-a nsga2 -p 5 -g 5 -r 11 -b 64"
 }
 
+
+def make_cmd(folder, p, a):
+    text = "#!/bin/bash\n\n" + "ml Python/3.9.5-GCCcore-10.3.0\n" + "echo \" " + p + " " + a + "\"\n"
+    file = os.path.join(folder, "run.sh")
+    with open(file, 'w') as f:
+        f.write(text)
+    subprocess.call(['chmod', '+x', 'run.sh'])
+
+
 if not os.path.isdir(path):
     os.mkdir(path)
 
@@ -39,6 +49,8 @@ for name, args in test.items():
     shutil.copyfile("submit.sh", os.path.join(folder, "submit.sh"))
     shutil.copyfile("###QSUB.SH", os.path.join(folder, "###QSUB.SH"))
     os.chdir(folder)
-    subprocess.call(['chmod', '+x', './###QSUB.SH'])
+    make_cmd(folder, program, args)
     subprocess.call(['./###QSUB.SH', program, args])
+    subprocess.call(['chmod', '+x', '###QSUB.SH'])
     os.chdir("../../")
+
