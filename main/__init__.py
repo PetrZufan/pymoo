@@ -345,7 +345,7 @@ def run(algorithm, population, generations, grid, batch):
             crossover=get_crossover("real_two_point"),
             rotation=MORealQuantumRotation(),
             eliminate_duplicates=False,
-            callback=SaveProgressCallback()
+            # callback=SaveProgressCallback()
         )
     if algorithm == "nsga2":
         alg = NSGA2(
@@ -353,7 +353,7 @@ def run(algorithm, population, generations, grid, batch):
             sampling=NeuralNetworkSampling(),
             repair=SparsityRepair(),
             eliminate_duplicates=False,
-            callback=SaveProgressCallback()
+            # callback=SaveProgressCallback()
         )
     if algorithm == "qiga":
         alg = QIGA(
@@ -362,11 +362,12 @@ def run(algorithm, population, generations, grid, batch):
             crossover=get_crossover("real_one_point"),
             mutation=get_mutation("quantum_bitflip"),
             rotation=SORealQuantumRotation(),
-            callback=SaveProgressCallback()
+            # callback=SaveProgressCallback()
         )
     if algorithm == "ga":
         alg = GA(
-            pop_size=population
+            pop_size=population,
+            # callback=SaveProgressCallback()
         )
 
     res = minimize(
@@ -379,8 +380,10 @@ def run(algorithm, population, generations, grid, batch):
     )
 
     storage = Results()
-    res.history.append({"opt": res.opt, "pop": res.pop})
-    storage.save_data(res.history, "res.p")
+
+    # exceed disk space limit :(
+    # res.history.append({"opt": res.opt, "pop": res.pop})
+    # storage.save_data(res.history, "res.p")
 
     str_fit = "\n"
     for i, opt in enumerate(res.opt):
